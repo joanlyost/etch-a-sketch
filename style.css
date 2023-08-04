@@ -1,0 +1,9 @@
+.board {
+    display: grid;
+    grid-template-rows: repeat(16, 1px);
+    grid-template-columns: repeat(16, 1px);
+}
+
+.drawing-squares {
+    border: 0.1px solid black;
+}
