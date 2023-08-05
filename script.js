@@ -1,21 +1,107 @@
 const setDrawingBoard = document.querySelector("#set-drawing-board");
-setDrawingBoard.addEventListener("click", createSquares);
+setDrawingBoard.addEventListener("click", createDrawingBoard);
 
-function createSquares() {
-    const drawingBoard = document.querySelector("#drawing-board");
-    let width = 16;
-    let height = 16;
-    let totalSize = width*height;
-    drawingBoard.setAttribute
-        ("style", `width:${width}; height:${height}; 
-         grid-template-rows: repeat(${width}, 1px); 
-         grid-template-columns: repeat(${height}, 1px);`);
+function createDrawingBoard() {
+    const size = setSize();
+    const board = createGrid();
+    let pencilState = false;
+    let colorfulState = false;
 
-    for(let i = 0; i < totalSize; i++) {
-        const div = document.createElement("div");
-        div.dataset.pixels = "draw";
-        div.classList.add("drawing-squares");
+    const pixelsDraw = document.querySelectorAll("div[data-pixels='draw']");
+    const pencil = document.querySelector("#pencil");
+    const colorful = document.querySelector("#colorful");
 
-        drawingBoard.appendChild(div);
+    setDrawingBoard.addEventListener("click", setNewSize);
+    pixelsDraw.forEach((pixel) => pixel.addEventListener("mouseover", draw));
+    pencil.addEventListener("click", changePencilState);
+    colorful.addEventListener("click", changeColorfulState);
+
+    resetBtns();
+
+    function createGrid() {
+        const drawingBoard = document.querySelector("#drawing-board");
+        let width = size;
+        let height = size;
+        let totalSize = width*height;
+        drawingBoard.setAttribute
+            ("style", `width:${width}; height:${height}; 
+            grid-template-rows: repeat(${width}, 1px); 
+            grid-template-columns: repeat(${height}, 1px);`);
+
+        for(let i = 0; i < totalSize; i++) {
+            const div = document.createElement("div");
+            div.dataset.pixels = "draw";
+            div.classList.add("drawing-squares");
+
+            drawingBoard.appendChild(div);
+        }
+    }
+
+    function setSize(boardSize) {
+        boardSize = parseInt(prompt("Choose a size for your board"));
+        if(isNaN(boardSize) === true || boardSize > 100) {
+            alert("Your input should be a number not higher than 100");
+            return setSize();
+        } else {
+            return boardSize;
+        }
+    };
+    function setNewSize() {
+        width = 0;
+        height = 0;
+        pixelsDraw.forEach((pixel) => pixel.remove());
+    }
+    
+    function resetBtns() {
+        pencil.style.fontWeight = "normal";
+        colorful.style.fontWeight = "normal";
+    }
+    function changePencilState() {
+        if (pencilState === true) {
+            pencilState = false;
+            pencil.style.fontWeight = "normal";
+            pixelsDraw.forEach(pixel => {
+                if(!pixel.style.backgroundColor) pixel.style.opacity = "1";
+            });
+        } else {
+            pencilState = true;
+            pencil.style.fontWeight = "bolder";
+            pixelsDraw.forEach(pixel => {
+                if(!pixel.style.backgroundColor) pixel.style.opacity = "0.1"
+            });
+        }
+    }
+    function changeColorfulState() {
+        if (colorfulState === true) {
+            colorfulState = false;
+            colorful.style.fontWeight = "normal";
+        } else {
+            colorfulState = true;
+            colorful.style.fontWeight = "bolder";
+        } 
+    }
+        
+    function draw(color) {
+        this.style.backgroundColor = "blue";
+
+        if(colorfulState === true) {
+            color = getRandomColor();
+            this.style.backgroundColor = `${color}`;
+        }
+        if(pencilState === true) {
+            if(parseFloat(this.style.opacity) < 1){
+            this.style.opacity = `${parseFloat(this.style.opacity) + 1/10}`;
+            }
+        }
+    }
+    function getRandomColor(color, randomColor){
+        color = [];
+        const randomizer = () => Math.floor(Math.random() * (1 + 255));
+        for(i = 0; i < 3; i++) {
+            color.push(randomizer());
+        }
+        randomColor = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+
+        return randomColor;
     }
 }

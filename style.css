@@ -2,6 +2,14 @@
     display: grid;
 }
 
-.drawing-squares {
-    border: 0.1px solid black;
+.style-btn {
+    width: 30px;
+    height: 10px;
+    font-size: 3px;
+}
+
+.board-btn {
+    width: 50px;
+    height: 10px;
+    font-size: 3px;
 }
