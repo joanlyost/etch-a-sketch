@@ -11,6 +11,7 @@ function createDrawingBoard() {
     const pencil = document.querySelector("#pencil");
     const colorful = document.querySelector("#colorful");
 
+    const setDrawingBoard = document.querySelector("#set-drawing-board");
     setDrawingBoard.addEventListener("click", setNewSize);
     pixelsDraw.forEach((pixel) => pixel.addEventListener("mouseover", draw));
     pencil.addEventListener("click", changePencilState);
@@ -38,12 +39,16 @@ function createDrawingBoard() {
     }
 
     function setSize(boardSize) {
-        boardSize = parseInt(prompt("Choose a size for your board"));
-        if(isNaN(boardSize) === true || boardSize > 100) {
-            alert("Your input should be a number not higher than 100");
-            return setSize();
-        } else {
-            return boardSize;
+        boardSize = prompt("Choose a size for your board");
+ 
+        if(boardSize !== null) {
+            parseInt(boardSize);
+            if(isNaN(boardSize) === true || boardSize > 100) {
+                alert("Your input should be a number not higher than 100");
+                return setSize();
+            } else {
+                return boardSize;
+            }
         }
     };
     function setNewSize() {
@@ -84,8 +89,8 @@ function createDrawingBoard() {
             }
         }
 
-        this.style.backgroundColor = "blue";
-        
+        this.style.backgroundColor = "blue";  
+
         if(colorfulState === true) {
             color = getRandomColor();
             this.style.backgroundColor = `${color}`;
