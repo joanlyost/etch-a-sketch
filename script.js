@@ -60,15 +60,9 @@ function createDrawingBoard() {
         if (pencilState === true) {
             pencilState = false;
             pencil.style.fontWeight = "normal";
-            pixelsDraw.forEach(pixel => {
-                if(!pixel.style.backgroundColor) pixel.style.opacity = "1";
-            });
         } else {
             pencilState = true;
             pencil.style.fontWeight = "bolder";
-            pixelsDraw.forEach(pixel => {
-                if(!pixel.style.backgroundColor) pixel.style.opacity = "0.1"
-            });
         }
     }
     function changeColorfulState() {
@@ -82,16 +76,19 @@ function createDrawingBoard() {
     }
         
     function draw(color) {
-        this.style.backgroundColor = "blue";
+        if(pencilState === true) {
+            if(parseFloat(this.style.opacity) < 1){
+                this.style.opacity = `${parseFloat(this.style.opacity) + 1/10}`;
+            } else if(!this.style.backgroundColor) {
+                this.style.opacity = "0.1";
+            }
+        }
 
+        this.style.backgroundColor = "blue";
+        
         if(colorfulState === true) {
             color = getRandomColor();
             this.style.backgroundColor = `${color}`;
-        }
-        if(pencilState === true) {
-            if(parseFloat(this.style.opacity) < 1){
-            this.style.opacity = `${parseFloat(this.style.opacity) + 1/10}`;
-            }
         }
     }
     function getRandomColor(color, randomColor){
